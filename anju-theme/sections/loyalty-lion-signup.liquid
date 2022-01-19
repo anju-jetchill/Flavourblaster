@@ -1,0 +1,44 @@
+<div class="loyalty-lion-signup">
+    <div class="loyalty-lion-signup__wrap">
+     {%- if section.settings.imageBG1 -%}
+            <div class="loyalty-lion-signup__background-images">
+                {%- render 'image-responsive', image: section.settings.imageBG1, custom_alt : shop.name, custom_class : 'loyalty-lion-signup__bgImg1' -%}
+               
+         </div>
+        {%- endif -%}
+
+        {%- if section.settings.image -%}
+            <div class="loyalty-lion-signup__logo">
+                {%- render 'image-responsive', image: section.settings.image, custom_alt : shop.name -%}
+            </div>
+        {%- endif -%}
+
+</div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Loyalty Lion: Sign up",
+    "settings": [
+
+        {
+            "type": "image_picker",
+            "id": "imageBG1",
+            "label": "Background Image: Bottom Left"
+        },
+
+        {
+            "type": "image_picker",
+            "id": "imageBG2",
+            "label": "Background Image: Top Right"
+        },
+
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Logo"
+        }
+    ]
+}
+{% endschema %}

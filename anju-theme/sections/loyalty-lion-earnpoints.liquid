@@ -1,0 +1,70 @@
+
+<div class="loyalty-lion-signup__content">
+  
+            {%- if section.settings.heading -%}
+                <h2>{{ section.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if section.settings.text -%}
+                <div class="loyalty-lion-signup__text">{{ section.settings.text }}</div>
+            {%- endif -%}
+
+            <div class="loyalty-lion-signup__form">
+                <a class="btn btn--green" href="/account/register">SIGN UP</a>
+                <span>Already got an account? <a href="/account/login">Sign in</a></span>
+            </div>
+
+           
+
+        </div>
+
+{%- if section.settings.showRulesList -%}
+    <div class="loyalty-lion-membership-tiers">
+        <h2>{{ section.settings.rulesListHeading }}</h2>
+        <div data-lion-rules-list></div>
+    </div>
+{%- endif -%}
+
+                                           
+
+
+{% schema %}
+{
+    "name": "Ways To Earn Points",
+    "settings": [
+     {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Earn rewards with the flavour blaster"
+        },
+
+        {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus sapiente sed voluptate ratione minima inventore porro ad? Dolores animi amet nemo sequi corporis debitis ullam itaque, fugiat accusamus, cum ratione!</p>"
+        },  
+
+{
+            "type": "header",
+            "content": "Guest View",
+            "info": "Settings for users who aren't logged in."
+        },
+
+     {
+            "type": "checkbox",
+            "id": "showRulesList",
+            "label": "Show Rewards List",
+            "default": true
+        },
+
+        {
+            "type": "text",
+            "id": "rulesListHeading",
+            "label": "Rules List - Heading",
+            "default": "Rules List"
+        }
+
+    ]
+}
+{% endschema %}
