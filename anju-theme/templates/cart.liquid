@@ -1,0 +1,427 @@
+<script src="https://www.paypal.com/sdk/js?client-id=ATvLJhjjkI0ZtbySZjbDM-5N5YvhpkMAqgnxGQBxsLtENQUh0gg8nV0jgklX5dKpV0J3pRHW9dYUQfkw"></script>
+{%- render 'breadcrumbs' -%}
+
+<div class="cart-header">
+  <div class="cart-header__wrap container">
+    <h1>MY BASKET</h1>
+  </div>
+</div>
+
+<div class="wk-cartcustom container">
+  <div class="wk-cartitems">
+<div class="wk-cartitemscolumn __left_pro_details">
+<div class="cart-items">
+      <!--[cart-items]-->
+      {%- if cart.item_count == 0 -%}
+	  <style>
+	  .wk-cartitemscolumn.__right_deatils_bar {
+    display: none;
+     }
+	  </style>
+      <div class="cart-items--no-items">
+        <p>You have no items in your basket</p>
+      </div>
+      {%- else -%}
+      {%- assign isPreOrder = false -%}
+      {%- assign aromas_qty = 0 -%}
+
+      {%- render 'bundle-cart-items' -%}
+
+      {%- for line_item in cart.items -%}
+      {%- if line_item.properties._bundle_id != blank -%}{%- continue -%}{%- endif -%}
+
+      {%- assign product = line_item.product -%}
+
+      {%- if product.tags contains "preorder" -%}{%- assign isPreOrder = true -%}{%- endif -%}
+
+      {%- render 'cart-item', product: product, line_item : line_item -%}
+
+      {%- assign lProductType = product.type | downcase -%}
+      {%- if lProductType == "flavours" or lProductType == "flavour" or lProductType == "aroma" or lProductType == "aromas"  -%}
+      {%- assign aromas_qty = aromas_qty | plus: line_item.quantity -%}
+      {%- endif -%}
+      {%- endfor -%}        
+      {%- endif -%}
+      {%- render 'cart-upsell-item' -%}
+      <!--[/cart-items]-->
+       </div>
+	 </div>
+	  
+
+	 <div class="wk-cartitemscolumn __right_deatils_bar">
+	
+      <h3> How you'll pay</h3>
+      <div class="payment_optioin">
+        <input type="radio"  name="wk-paymenticon" checked="checked">
+        <img src="{{ 'american_express' | payment_type_img_url }}" height="35" alt="american express" />
+        <img src="{{ 'maestro' | payment_type_img_url }}" height="35" alt="maestro" />
+        <img src="{{ 'master' | payment_type_img_url }}" height="35" alt="master" />
+        <img src="{{ 'visa' | payment_type_img_url }}" height="35" alt="visa" />
+      </div>
+      <div class="payment_optioin">
+        <input type="radio" name="wk-paymenticon" value="paypal" id="wk-paypal">
+        <img src="{{ 'paypal' | payment_type_img_url }}" height="35" alt="paypal" />
+      </div>
+      <div class="payment_optioin">
+        <input type="radio" name="wk-paymenticon">
+        <img src="https://cdn.shopify.com/shopifycloud/shopify/assets/payment_icons/klarna-389801c6056cb5600b4f05f72ebc2c58e4947688c6c4f5e6ccea41f7973d3a28.svg" height="35" alt="paypal" />
+      </div>
+ <div class="notes">
+        <div class="wk-cart-custom">
+          <div class="wktypecart">    
+            <div class="cart-attribute__field">
+
+              <div class="section__header">
+                <p class="section__title" id="section-applies-title">
+                  Type
+                </p>
+              </div>
+              <select class="field__input field__input--select" aria-required="true" id="cart_applies" name="attributes[Type]">
+                <option value="">Select Type...</option>
+                <option value="Group"{% if cart.attributes["Type"] == "Group" %} selected{% endif %}>Group</option>
+                <option value="Individual"{% if cart.attributes["Type"] == "Individual" %} selected{% endif %}>Individual</option>
+              </select>
+              <p class="agree_message id="error-for-applie"></p>
+            </div>  
+
+          </div> 
+          <div class="wk-cart-venue">
+            <div class="cart-attribute__field">
+              <div class="section__header">
+                <p class="section__title" id="section-venue-type-title">
+                  Venue
+                </p>
+              </div>
+              <select class="field__input field__input--select" aria-required="true" name="attributes[Venue]" id="cart_venue_type" placeholder="Venue">
+                <option value="">Select venue...</option>
+                <option value="Bar"{%- if cart.attributes['Venue'] == 'Bar' %} selected{% endif %}>Bar</option>
+                            <option value="Pub"{%- if cart.attributes['Venue'] == 'Pub' %} selected{% endif %}>Pub</option>
+                            <option value="Club"{%- if cart.attributes['Venue'] == 'Club' %} selected{% endif %}>Club</option>
+                            <option value="Restaurant"{%- if cart.attributes['Venue'] == 'Restaurant' %} selected{% endif %}>Restaurant</option>
+                            <option {%- if cart.attributes['Venue'] == 'Hotel' %} selected{% endif %}>Hotel</option>
+                            <option value="Casino"{%- if cart.attributes['Venue'] == 'Casino' %} selected{% endif %}>Casino</option>
+                            <option value="Drink Brand"{%- if cart.attributes['Venue'] == 'Drink Brand' %} selected{% endif %}>Drink Brand</option>
+                            <option value="Private Use"{%- if cart.attributes['Venue'] == 'Private Use' %} selected{% endif %}>Private Use</option>
+                            <option value="Tourist Attraction"{%- if cart.attributes['Venue'] == 'Tourist Attraction' %} selected{% endif %}>Tourist Attraction</option>
+                            <option value="Other"{%- if cart.attributes['Venue'] == 'Other' %} selected{% endif %}>Other</option>
+                        </select>
+              <p class="venue_message" id="error-for-venue-type"></p>
+            </div>
+            <div id="other-venue-type-specify" class="field field--required field--show-floating-label {%- if cart.attributes['Venue'] != 'Other' %} hidden{% endif %}">
+                    <div class="field__input-wrapper">
+                                                     <label class="field__label field__label--visible" for="cart_venue_type_other"> </label>
+                                                                                                                                  <input placeholder="Venue" autocorrect="off" class="field__input" type="text" name="attributes[Venue Specify]" value="{{ cart.attributes['Venue Specify'] }}" id="cart_venue_type_other" aria-haspopup="false">
+                    </div>
+                    <p class="field__message field__message--error venue_specify_message" id="error-for-venue-type-other"></p>
+                                                                                                                         </div>
+                                                                                                                         </div>  
+
+
+
+
+                                                                                                                         </div>
+                                                                                                                         </div>
+ 
+                      <div class="wkcartsummary">                                                                                                   <div class="cart-summary">
+																														 
+
+
+                                                                                                                                                  <!--[cart-summary]-->
+                                                                                                                                                  {%- if cart.item_count > 0 -%}
+
+                                                                                                                                                  {%- render 'loyalty-lion-cart-available-points' -%}
+
+                                                                                                                                                  <div class="cart-summary__totals">
+            <p>TOTAL <span>{{ cart.total_price | money }}</span></p>
+        </div>
+
+        {%- if aromas_qty != blank -%}
+            {%- assign remainder = aromas_qty | modulo: 5 -%}
+            {%- unless remainder == 0 -%}
+                {%- assign amount_extra_needed = 5 | minus: remainder -%}
+                <div class="order-item-limit-notice">
+                                                    <p><strong>{{ amount_extra_needed }}</strong> More Aroma Item{% unless amount_extra_needed == 1 %}s{% endunless %} Required</p>
+                                                    <p>To proceed to checkout, you will need to add <strong>{{ amount_extra_needed }} more Aroma item{% unless amount_extra_needed == 1 %}s{% endunless %}</strong>&nbsp;to your cart.</p>
+                                                    </div>
+                                                    {%- endunless -%}
+                                                    {%- endif -%}
+
+
+                                                    {%- comment -%}PRE_ORDER_LOGIC{%- endcomment -%}
+                                                    {%- assign is_pre_order = false -%}
+                                                    {%- for line_item in cart.items -%}
+                                                    {%- if line_item.product.tags contains "preorder" -%}{%- assign is_pre_order = true -%}{%- endif -%}    
+                                                    {%- for variant in line_item.product.variants -%}
+                                                    {%- if variant.inventory_quantity <= 0 -%}
+                                                    {%- assign is_pre_order = true -%}
+                                                    {%- endif -%}
+                                                    {%- endfor -%}
+
+                                                    {%- assign preorder_disallow_list = settings.preorder_product_type_disallow_list | strip | split: ',' | downcase -%}
+                                                    {%- assign _product_type = line_item.product.type | strip | downcase -%}
+                                                    {%- if preorder_disallow_list contains _line_item.product_type -%}
+                                                    {%- assign is_pre_order = false -%}
+                                                    {%- endif -%}
+
+                                                    {%- if is_pre_order -%}
+                                                    {%- assign preorder_message = settings.prorderCartText -%}
+                                                    {%- assign lc_product_type = line_item.product.type | strip | downcase -%}
+
+                                                    {%- for index in (1..3) -%}
+                                                    {%- capture custom_product_type_rule -%}preorder_message_{{ index }}_product_type{%- endcapture -%}
+                                                    {%- capture custom_product_text_rule -%}preorder_message_{{ index }}_text{%- endcapture -%}
+
+                                                    {%- assign lc_custom_product_type_rule =  settings[custom_product_type_rule] | strip | downcase -%}
+                                                    {%- unless lc_product_type == lc_custom_product_type_rule -%}{%- continue -%}{%- endunless -%}
+                                                    {%- assign preorder_message = settings[custom_product_text_rule] -%}
+                                                    {% break %}
+                                                    {%- endfor -%}
+
+                                                    <div class="pre-order-notice">{{ preorder_message }}</div>
+                                                                                 {% break %}
+                                                                                 {%- endif -%}
+                                                                                 {%- endfor -%}
+                                                                                 {%- comment -%}END_PRE_ORDER_LOGIC{%- endcomment -%}
+
+                                                                                 <div class="cart-summary__actions">
+                                                                                                                   {%- if remainder > 0 -%}
+                                                                                                                   <button class="btn btn--green disabled">Invalid Item Amount</button>
+            {%- else -%}
+
+               
+																		  
+		
+
+                                                                          <a class="btn btn--outline-pink" href="/">Continue Shopping</a>
+                                                                                                                   </div>
+
+
+                                                                                                                   {%- endif -%}
+                                                                                                                   <!--[/cart-summary]-->
+                                                                                                                           </div>
+																														   <div class="wkcustombutton">
+		 {%- assign buttonText = "Checkout" -%}
+                {%- if is_pre_order -%}
+                    {%- assign buttonText = "PRE-ORDER" -%}
+                {%- endif -%}
+				 <a name="checkout" class="btn btn--green wk-customgreen" href="/checkout">{{ buttonText }}</a>
+
+               {%- endif -%}																					{% if additional_checkout_buttons %}
+     <div class="wk-additionalcustom" name="wk-additionalcustombutton"> 
+	     <div id="wk-alternativepayment">                                                                 
+  <div class="dynamic-checkout">
+   <div class="dynamic-checkout__content">
+    <div id="paypal-button-container"></div>
+  </div>
+   </div>   
+</div>    
+</div>                                        
+{% endif %}
+
+			</div>
+</div>			
+
+                     </div>
+					                                                                                             
+                                                                                                    </div>
+         </div>  
+
+
+                                                                                                                   <script type="text/javascript">
+                                                                                                                                                 function getCookie(e){var n=("; "+document.cookie).split("; "+e+"=");if(2==n.length)return n.pop().split(";").shift()}function updateInvoiceCurrency(){var e=getCookie("boldCurrencyCookie");if("undefined"!=e)var n=setInterval(function(){"undefined"!=window.BOLDCURRENCY.rateInfo&&"undefined"!=window.BOLDCURRENCY.rateInfo[e].rate&&(updateCart(e,window.BOLDCURRENCY.rateInfo[e].rate),clearInterval(n))},1e3)}function updateCart(e,n){var t=getCookie("cart_updated");console.log(t),1!=t&&(xhr=new XMLHttpRequest,xhr.open("GET","/cart/update.json?"+encodeURI("attributes[_easy_invoice_currency]="+e+"&attributes[_easy_invoice_currency_rate]="+n)),xhr.send(),document.cookie="cart_updated=1")}window.addEventListener("load",function(e){var n=setInterval(function(){var e=document.getElementsByClassName("currency-dropdown-option");if(e){for(var t=0;t<e.length;t++)e[t].addEventListener("click",function(){document.cookie="cart_updated=0",updateInvoiceCurrency()},!1);clearInterval(n)}},1e3);updateInvoiceCurrency()});
+</script>
+
+
+<script>
+$(document).ready(function() {
+  $('body').on('click', '[name="checkout"],[name="wk-additionalcustombutton"], [name="goto_pp"], [name="goto_gc"]', function() {
+ if ($('#cart_applies').val() !='') {
+ $(this).submit();
+ }
+else {
+$('#cart_applies').addClass('required-alert');      
+       $('.agree_message').text("Select Type");
+                                                                                                                   return false;
+                                                                                                                   }
+                                                                                                                   if ($('#cart_venue_type').val() !='') {
+                                                                                                                   $(this).submit();
+                                                                                                                   }
+                                                                                                                   else {
+                                                                                                                   $('#cart_venue_type').addClass('required-alert');      
+                                                                                                                   $('.venue_message').text("Select Venue");
+      return false;
+    }
+
+
+  if ($('#cart_venue_type').val() =='Other' && $('#cart_venue_type_other').val() =='') {
+
+                                             $('#cart_venue_type_other').addClass('required-alert');      
+      $('.venue_specify_message').text("Specify Venue");
+                                                      return false;
+
+                                                      }
+                                                      else  {
+                                                      $(this).submit();
+                                                      }                                         
+
+
+                                                      });
+
+                                                      $('body').on('change', 'select#cart_applies', function() {
+                                                      if ($('#cart_applies').val() !='') {
+                                                      $('#cart_applies').removeClass('required-alert'); 
+                                                      $('.agree_message').text("");
+                                                                                 }
+                                                                                 });
+
+                                                                                 $('body').on('change', 'select#cart_venue_type', function() {
+                                                                                 if ($('#cart_venue_type').val() !='') {
+                                                                                 $('#cart_venue_type').removeClass('required-alert'); 
+                                                                                 $('.venue_message').text("");
+                                                                                                            }
+                                                                                                            });
+
+
+                                                                                                            $('body').on('change', '#cart_venue_type_other', function() {
+                                                                                                            if ($('#cart_venue_type_other').val() !='') {
+                                                                                                            $('#cart_venue_type_other').removeClass('required-alert'); 
+                                                                                                            $('.venue_specify_message').text("");
+                                                                                                                                               }
+                                                                                                                                               });
+
+                                                                                                                                               $('body').on('change', 'select#cart_venue_type', function() {
+
+                                                                                                                                               if ($('#cart_venue_type').val() =='Other') {
+
+                                                                                                                                               $('div#other-venue-type-specify').removeClass('hidden');           
+                                                                                                                                               }
+                                                                                                                                               else{
+
+                                                                                                                                               $('div#other-venue-type-specify').addClass('hidden');                      
+                                                                                                                                               }
+                                                                                                                                               });
+                                                                                                                                               });
+
+
+		     $(function () {
+    $('.wk-additionalcustom').hide();
+ 
+
+    $("input[name=wk-paymenticon]:radio").click(function () {
+
+        if ($('input[name=wk-paymenticon]:checked').val() == "paypal") {
+            $('a.btn.btn--green').hide();
+            $('.wk-additionalcustom').show();
+
+        } 
+		else {
+             $('a.btn.btn--green').show();
+            $('.wk-additionalcustom').hide();
+}
+    });
+});     
+ 																																	   
+																																			   
+																																			   </script>
+
+                                                                     
+<script>
+    	
+    var _venueDropdownInit = function() {
+                                                                                                
+var expressButtonOverlay = document.getElementsByClassName("dynamic-checkout__content")[0];
+  
+var appliesSelectEl = document.getElementById('cart_applies');
+        var appliesErrorEl = document.getElementById('error-for-applie'); 
+       var venueTypeSelectEl = document.getElementById('cart_venue_type');
+		
+		 var venueTypeErrorEl = document.getElementById('error-for-venue-type');
+        
+		var venueTypeOtherSpecifyFieldEl = document.getElementById('cart_venue_type_other');
+		var venueTypeOtherSpecifyErrorEl = document.getElementById('error-for-venue-type-other');
+		var venueTypeOtherSpecifyFieldWapperEl = document.getElementById('other-venue-type-specify');
+        
+        
+
+		 var alternativepayment = document.getElementById('wk-alternativepayment');
+		 	if (alternativepayment) {
+            alternativepayment.addEventListener('click', function(e) {
+                 
+				 if (appliesSelectEl.value == "") {
+                  expressButtonOverlay.classList.add('appliesexpress-overlay'); 
+                 }
+				 else {
+                
+                expressButtonOverlay.classList.remove('appliesexpress-overlay'); 
+
+                }
+
+				 
+				if (venueTypeSelectEl.value == "") {
+                    expressButtonOverlay.classList.add('express-overlay'); 
+                 }
+				 else {
+                
+                expressButtonOverlay.classList.remove('express-overlay'); 
+
+           }
+                    
+            });
+        }
+		 
+	 venueTypeSelectEl.addEventListener('change', function() {
+            if (this.value == "") {
+              
+                expressButtonOverlay.classList.add('express-overlay'); 
+            } else {
+                
+                expressButtonOverlay.classList.remove('express-overlay'); 
+            }
+if (this.value == "Other" || venueTypeOtherSpecifyErrorEl==" " ){
+ expressButtonOverlay.classList.add('wk-customoverlay'); 
+}
+
+
+         
+        });
+
+        venueTypeOtherSpecifyFieldEl.addEventListener('input', function() {
+            if (this.value == "") {
+                this.parentNode.parentNode.classList.add('field--error');
+                venueTypeOtherSpecifyErrorEl.innerText = "Specify a venue"
+            } else {
+                this.parentNode.parentNode.classList.remove('field--error');
+                venueTypeOtherSpecifyErrorEl.innerText = ""
+				expressButtonOverlay.classList.remove('wk-customoverlay'); 
+            }
+        });
+
+    };
+
+    (function() {
+	var expressButtonOverlay = document.getElementsByClassName("dynamic-checkout__content")[0];
+    expressButtonOverlay.classList.add('express-overlay'); 
+                                                                                          
+        _venueDropdownInit();
+        setInterval(function() {
+            if (document.getElementById('cart_venue_type')) return;
+            _venueDropdownInit();
+        }, 1000);
+    }());   
+
+	
+ </script>
+ <script>
+     
+        paypal.Buttons({
+
+            style: {
+                
+                shape:  'pill',
+               height: 40,
+			   layout: 'horizontal',
+     tagline: 'false'
+            }
+
+        }).render('#paypal-button-container');
+    </script>
