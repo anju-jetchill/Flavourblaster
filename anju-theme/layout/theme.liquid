@@ -46,7 +46,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {% include "xo-insertcode-header" %}
 <!-- End: XO-InsertCode Header-->
       <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  </head>
+ 
+  <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+  {% include 'dual-price' %}</head>
       <body class="template-{{ template.name }}{%- if template.suffix -%}__{{ template.suffix }}{%- endif %} {% if customer -%}customer--isLoggedIn{%- endif %}">
         <script type="text/javascript">
             window.addEventListener('DOMContentLoaded', function() {
