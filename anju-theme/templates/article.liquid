@@ -7,3 +7,15 @@
         {{ article.content }}
     </div>
 </div>
+<div class="previous_next_buttons">
+  {% if blog.previous_article %}
+  <a href="{{ blog.previous_article }}" class="btn">
+    Previous    
+  </a>
+   {% endif %}
+   {% if blog.next_article %}
+  <a href="{{ blog.next_article }}" class="btn">
+    Next 
+  </a>
+   {% endif %}
+</div>
